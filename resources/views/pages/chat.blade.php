@@ -101,7 +101,11 @@
                     <li class="tyn-appbar-item">
                         <a class="d-inline-flex dropdown-toggle" data-bs-auto-close="outside" data-bs-toggle="dropdown" href="#" data-bs-offset="0,10">
                             <div class="tyn-media tyn-size-lg tyn-circle nav-image-profile">
+                                @if($authUser->profile_photo!=null)
                                 <img src="{{asset('/storage/profile_photos/'.$authUser->profile_photo)}}" alt="">
+                                @else
+                                    <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                                @endif
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
@@ -153,15 +157,20 @@
                                 </li>
                                 <li class="dropdown-divider"></li>
                                 <li>
-                                    <a href="#">
-                                        <!-- power -->
+                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">
+                                        <!-- Power icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
                                             <path d="M7.5 1v7h1V1h-1z" />
                                             <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z" />
                                         </svg>
                                         <span>Log Out</span>
                                     </a>
+                                    <form id="logoutForm" action="{{ route('user.logout') }}" method="post">
+                                        @csrf
+                                        <button type="submit" class="hidden"></button>
+                                    </form>
                                 </li>
+
                             </ul>
                         </div>
                     </li>
@@ -224,87 +233,29 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="tab-content">
                     {{--All Chat--}}
                     <div class="tab-pane show active" id="all-chats" tabindex="0" role="tabpanel">
                         <ul class="tyn-aside-list">
-                            <li class="tyn-aside-item js-toggle-main active">
-                                <div class="tyn-media-group">
-                                    <div class="tyn-media tyn-size-lg">
-                                        <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
-                                    </div>
-                                    <div class="tyn-media-col">
-                                        <div class="tyn-media-row">
-                                            <h6 class="name">Jasmine Thompson</h6>
-                                        </div>
-                                        <div class="tyn-media-row has-dot-sap">
-                                            <p class="content">Had they visited Rome before</p>
-                                            <span class="meta">45 min</span>
-                                        </div>
-                                    </div>
-                                    <div class="tyn-media-option tyn-aside-item-option">
-                                        <ul class="tyn-media-option-list">
-                                            <li class="dropdown">
-                                                <button class="btn btn-icon btn-white btn-pill dropdown-toggle" data-bs-toggle="dropdown" data-bs-offset="0,0" data-bs-auto-close="outside">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-                                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-                                                    </svg>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <ul class="tyn-list-links">
-
-
-                                                        <li>
-                                                            <a href="contacts.html">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-                                                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
-                                                                </svg>
-                                                                <span>View Profile</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="dropdown-divider"></li>
-                                                        <li>
-                                                            <a href="#callingScreen" data-bs-toggle="modal">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
-                                                                    <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z" />
-                                                                </svg>
-                                                                <span>Audio Call</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#videoCallingScreen" data-bs-toggle="modal">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-camera-video" viewBox="0 0 16 16">
-                                                                    <path fill-rule="evenodd" d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2V5zm11.5 5.175 3.5 1.556V4.269l-3.5 1.556v4.35zM2 4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h7.5a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H2z" />
-                                                                </svg>
-                                                                <span>Video Call</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
+                            @foreach($friends as $friendsData)
                             <li class="tyn-aside-item js-toggle-main">
                                 <div class="tyn-media-group">
                                     <div class="tyn-media tyn-size-lg">
-                                        <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                                        @if($friendsData->profile_photo!=null)
+                                            <img src="{{asset('/storage/profile_photos/'.$friendsData->profile_photo)}}" alt="">
+                                        @else
+                                            <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                                        @endif
                                     </div>
+                                    <a href="{{ route('chat', ['user' => $friendsData->id]) }}">
                                     <div class="tyn-media-col">
                                         <div class="tyn-media-row">
-                                            <h6 class="name">Konstantin Frank</h6>
-                                            <div class="indicator varified">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <div class="tyn-media-row has-dot-sap">
-                                            <p class="content">Liked that disco music</p>
-                                            <span class="meta">1 days</span>
+                                            <h6 class="name">{{$friendsData->first_name}} {{$friendsData->last_name}}</h6>
                                         </div>
                                     </div>
+                                    </a>
                                     <div class="tyn-media-option tyn-aside-item-option">
                                         <ul class="tyn-media-option-list">
                                             <li class="dropdown">
@@ -316,7 +267,7 @@
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <ul class="tyn-list-links">
                                                         <li>
-                                                            <a href="contacts.html">
+                                                            <a href="{{route('visit.user.profile' , $friendsData->id)}}">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                                                                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z" />
                                                                 </svg>
@@ -347,6 +298,8 @@
                                     </div>
                                 </div>
                             </li>
+
+                            @endforeach
                         </ul>
                     </div>
                     {{--Active Chat--}}
@@ -418,9 +371,12 @@
 
 
         <div class="tyn-main tyn-chat-content" id="tynMain">
+            {{-- Massage Body--}}
+            @if(isset($selectedUser))
             <div class="tyn-chat-head">
                 <ul class="tyn-list-inline d-md-none ms-n1">
-                    <li><button class="btn btn-icon btn-md btn-pill btn-transparent js-toggle-main">
+                    <li>
+                        <button class="btn btn-icon btn-md btn-pill btn-transparent js-toggle-main">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
                             </svg>
@@ -429,14 +385,22 @@
                 </ul>
                 <div class="tyn-media-group">
                     <div class="tyn-media tyn-size-lg d-none d-sm-inline-flex">
-                        <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                        @if($selectedUser->profile_photo!=null)
+                            <img src="{{asset('/storage/profile_photos/'.$selectedUser->profile_photo)}}" alt="">
+                        @else
+                            <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                        @endif
                     </div>
                     <div class="tyn-media tyn-size-rg d-sm-none">
-                        <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                        @if($selectedUser->profile_photo!=null)
+                            <img src="{{asset('/storage/profile_photos/'.$selectedUser->profile_photo)}}" alt="">
+                        @else
+                            <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                        @endif
                     </div>
                     <div class="tyn-media-col">
                         <div class="tyn-media-row">
-                            <h6 class="name">Jasmine <span class="d-none d-sm-inline-block">Thompson</span></h6>
+                            <h6 class="name">{{$selectedUser->first_name}} {{$selectedUser->last_name}}</h6>
                         </div>
                         <div class="tyn-media-row has-dot-sap">
                             <span class="meta">Active</span>
@@ -493,7 +457,6 @@
                                             <ul class="tyn-list-links">
                                                 <li>
                                                     <a href="#">
-                                                        <!-- pencil-square -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -503,7 +466,6 @@
                                                 </li>
                                                 <li>
                                                     <a href="#">
-                                                        <!-- trash -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
                                                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
@@ -602,7 +564,7 @@
                                                         <span>Delete</span>
                                                     </a>
                                                 </li>
-                                            </ul><
+                                            </ul>
                                         </div>
                                     </li>
                                 </ul>
@@ -611,6 +573,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="tyn-chat-form">
                 <div class="tyn-chat-form-insert">
                     <ul class="tyn-list-inline gap gap-3">
@@ -651,40 +614,51 @@
                     </ul>
                 </div>
                 <div class="tyn-chat-form-enter">
+                    {{--Message wright area--}}
                     <div class="tyn-chat-form-input" id="tynChatInput" contenteditable></div>
+
                     <ul class="tyn-list-inline me-n2 my-1">
-                        <li><button class="btn btn-icon btn-white btn-md btn-pill">
-                                <!-- mic-fill -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic-fill" viewBox="0 0 16 16">
-                                    <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
-                                    <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
-                                </svg>
-                            </button></li>
-                        <li><button class="btn btn-icon btn-white btn-md btn-pill" id="tynChatSend">
+                        <li>
+                            {{--Message Send Button--}}
+                            <button class="btn btn-icon btn-white btn-md btn-pill" id="tynChatSend">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
                                     <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
                                 </svg>
-                            </button></li>
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </div>
+            @endif
+
+            {{-- Image Videos Link File--}}
+            @if(isset($selectedUser))
             <div class="tyn-chat-content-aside" id="tynChatAside" data-simplebar>
                 <div class="tyn-chat-cover">
-                    <img src="{{URL::to('defult/cover.jpeg')}}" alt="">
+                    @if($selectedUser->profile_photo!=null)
+                        <img src="{{asset('/storage/cover_photos/'.$selectedUser->cover_photo)}}" alt="">
+                    @else
+                        <img src="{{URL::to('defult/cover.jpeg')}}" alt="">
+                    @endif
                 </div>
                 <div class="tyn-media-group tyn-media-vr tyn-media-center mt-n4">
                     <div class="tyn-media tyn-size-xl border border-2 border-white">
-                        <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                        @if($selectedUser->profile_photo!=null)
+                            <img src="{{asset('/storage/profile_photos/'.$selectedUser->profile_photo)}}" alt="">
+                        @else
+                            <img src="{{URL::to('defult/profile.jpeg')}}" alt="">
+                        @endif
                     </div>
                     <div class="tyn-media-col">
                         <div class="tyn-media-row">
-                            <h6 class="name">Konstantin Frank</h6>
+                            <h6 class="name">{{$selectedUser->first_name}} {{$selectedUser->last_name}}</h6>
                         </div>
                         <div class="tyn-media-row has-dot-sap">
                             <span class="meta">Active Now</span>
                         </div>
                     </div>
                 </div>
+
                 <div class="tyn-aside-row">
                     <ul class="nav nav-btns nav-btns-stretch nav-btns-light">
                         <li class="nav-item">
@@ -775,14 +749,13 @@
                                             </a>
                                         </div>
                                     </div>
-                                </div><!-- .tab-pane -->
+                                </div>
                                 <div class="tab-pane" id="chat-media-files" tabindex="0">
                                     <ul class="tyn-media-list gap gap-3">
                                         <li>
                                             <a href="#" class="tyn-file">
                                                 <div class="tyn-media-group">
                                                     <div class="tyn-media tyn-size-lg text-bg-light">
-                                                        <!-- filetype-csv -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-csv" viewBox="0 0 16 16">
                                                             <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM3.517 14.841a1.13 1.13 0 0 0 .401.823c.13.108.289.192.478.252.19.061.411.091.665.091.338 0 .624-.053.859-.158.236-.105.416-.252.539-.44.125-.189.187-.408.187-.656 0-.224-.045-.41-.134-.56a1.001 1.001 0 0 0-.375-.357 2.027 2.027 0 0 0-.566-.21l-.621-.144a.97.97 0 0 1-.404-.176.37.37 0 0 1-.144-.299c0-.156.062-.284.185-.384.125-.101.296-.152.512-.152.143 0 .266.023.37.068a.624.624 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.092 1.092 0 0 0-.2-.566 1.21 1.21 0 0 0-.5-.41 1.813 1.813 0 0 0-.78-.152c-.293 0-.551.05-.776.15-.225.099-.4.24-.527.421-.127.182-.19.395-.19.639 0 .201.04.376.122.524.082.149.2.27.352.367.152.095.332.167.539.213l.618.144c.207.049.361.113.463.193a.387.387 0 0 1 .152.326.505.505 0 0 1-.085.29.559.559 0 0 1-.255.193c-.111.047-.249.07-.413.07-.117 0-.223-.013-.32-.04a.838.838 0 0 1-.248-.115.578.578 0 0 1-.255-.384h-.765ZM.806 13.693c0-.248.034-.46.102-.633a.868.868 0 0 1 .302-.399.814.814 0 0 1 .475-.137c.15 0 .283.032.398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.441 1.441 0 0 0-.489-.272 1.838 1.838 0 0 0-.606-.097c-.356 0-.66.074-.911.223-.25.148-.44.359-.572.632-.13.274-.196.6-.196.979v.498c0 .379.064.704.193.976.131.271.322.48.572.626.25.145.554.217.914.217.293 0 .554-.055.785-.164.23-.11.414-.26.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.799.799 0 0 1-.118.363.7.7 0 0 1-.272.25.874.874 0 0 1-.401.087.845.845 0 0 1-.478-.132.833.833 0 0 1-.299-.392 1.699 1.699 0 0 1-.102-.627v-.495Zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879l-1.327 4Z" />
                                                         </svg>
@@ -798,7 +771,6 @@
                                             <a href="#" class="tyn-file">
                                                 <div class="tyn-media-group">
                                                     <div class="tyn-media tyn-size-lg text-bg-light">
-                                                        <!-- filetype-mdx -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-mdx" viewBox="0 0 16 16">
                                                             <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM.706 15.849v-2.66h.038l.952 2.159h.516l.946-2.16h.038v2.661h.715V11.85h-.8l-1.14 2.596h-.026L.805 11.85H0v3.999h.706Zm3.559-3.999v3.999h1.459c.402 0 .735-.08.999-.237a1.45 1.45 0 0 0 .595-.689c.13-.3.196-.662.196-1.084 0-.42-.066-.778-.196-1.075a1.426 1.426 0 0 0-.59-.68c-.263-.156-.598-.234-1.004-.234h-1.46Zm.79.645h.563c.248 0 .451.05.61.152a.89.89 0 0 1 .354.454c.078.201.117.452.117.753 0 .227-.022.424-.067.592a1.14 1.14 0 0 1-.196.422.8.8 0 0 1-.334.252 1.298 1.298 0 0 1-.484.082h-.562v-2.707Zm4.787-.645h.894L9.46 13.857l1.254 1.992h-.908l-.85-1.415h-.035l-.852 1.415h-.862l1.24-2.016L7.22 11.85h.932l.832 1.439h.035l.823-1.439Z" />
                                                         </svg>
@@ -828,10 +800,12 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </div><!-- .tab-pane -->
+                                </div>
                             </div>
                         </div>
-                    </div><!-- .tab-pane -->
+                    </div>
+
+                    {{-- Customize & Manage --}}
                     <div class="tab-pane show active" id="chat-options" tabindex="0">
                         <div class="tyn-aside-row py-0">
                             <ul class="nav nav-tabs nav-tabs-line">
@@ -867,7 +841,6 @@
                                                             <ul class="tyn-media-option-list">
                                                                 <li>
                                                                     <button class="btn btn-icon btn-md btn-pill btn-light">
-                                                                        <!-- pencil-square -->
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -881,14 +854,13 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                </div><!-- .tab-pane -->
+                                </div>
                                 <div class="tab-pane" id="chat-options-manage" tabindex="0">
                                     <ul class="tyn-media-list gap gap-3">
                                         <li>
                                             <a href="#" class="tyn-file">
                                                 <div class="tyn-media-group">
                                                     <div class="tyn-media text-bg-light">
-                                                        <!-- person-x-fill -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">
                                                             <path fill-rule="evenodd" d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6.146-2.854a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z" />
                                                         </svg>
@@ -904,7 +876,6 @@
                                             <a href="#" class="tyn-file">
                                                 <div class="tyn-media-group">
                                                     <div class="tyn-media text-bg-light">
-                                                        <!-- exclamation-triangle-fill -->
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                                             <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                                                         </svg>
@@ -923,9 +894,12 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </div>
+
+{{--Audio Call modal--}}
 <div class="modal fade" tabindex="-1" id="callingScreen" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content border-0">
@@ -989,6 +963,8 @@
         </div><!-- .modal-content -->
     </div><!-- .modal-dialog -->
 </div><!-- .modal -->
+
+{{--Videos Call Modal--}}
 <div class="modal fade" tabindex="-1" id="videoCallingScreen" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content border-0">
@@ -1052,6 +1028,41 @@
         </div>
     </div>
 </div>
+
+
+
+
+<script src="{{asset('design/chat/js/pusher.min.js')}}"></script>
+<script src="{{asset('design/chat/js/echo.min.js')}}"></script>
+<script src="{{asset('design/chat/js/axios.min.js')}}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const chatInput = document.getElementById('tynChatInput');
+        const chatSendButton = document.getElementById('tynChatSend');
+
+        chatSendButton.addEventListener('click', function () {
+            const message = chatInput.innerText.trim();
+            if (message !== '') {
+                window.axios.post('{{ route("send.message") }}', {
+                    receiver_id: {{ $selectedUser?$selectedUser->id:'' }},
+                    message: message
+
+                })
+                    .then(response => {
+                        console.log(response.data);
+                        chatInput.innerText = '';
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        });
+        window.Echo.channel('chat.{{ $selectedUser?$selectedUser->id:'' }}')
+            .listen('NewMessage', (event) => {
+                console.log(event);
+            });
+    });
+</script>
 <script src="{{asset('design/chat/js/bundle.js')}}"></script>
 <script src="{{asset('design/chat/js/app.js')}}"></script>
 
