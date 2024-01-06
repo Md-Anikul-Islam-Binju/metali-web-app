@@ -176,7 +176,11 @@
                     <div class="bg-white shadow drop-shadow overflow-hidden dark:bg-black dark:text-white text-black rounded-md">
                         <div class="px-3 pt-0 pb-2">
                             <div class="flex items-center border-b pb-3 gap-x-2">
-                                <img alt="" class="block w-11 h-11 rounded-full mt-4" src="{{asset('/storage/profile_photos/'.$authUser->profile_photo)}}"></img>
+                                @if($authUser->profile_photo!=null)
+                                    <img alt="" class="block w-11 h-11 rounded-full mt-4" src="{{asset('/storage/profile_photos/'.$authUser->profile_photo)}}"></img>
+                                @else
+                                    <img class="block w-11 h-11 rounded-full mt-4" alt="" src="{{URL::to('defult/profile.jpeg')}}">
+                                @endif
                                 <div disabled
                                           type="button"
                                           data-te-toggle="modal"
@@ -227,7 +231,14 @@
                         <div class="flex items-start gap-x-10 justify-between">
                             <div class="flex items-center gap-x-0.5">
                                 <div class="w-[3rem]">
-                                    <img alt="" class="w-10 h-10 rounded-full" src="{{asset('/storage/profile_photos/'.$groupPostData->user->profile_photo)}}"></img>
+
+
+                                    @if($groupPostData->user->profile_photo!=null)
+                                        <img alt="" class="w-10 h-10 rounded-full" src="{{asset('/storage/profile_photos/'.$groupPostData->user->profile_photo)}}"></img>
+                                    @else
+                                        <img class="w-10 h-10 rounded-full" alt="" src="{{URL::to('defult/profile.jpeg')}}">
+                                    @endif
+
                                 </div>
                                 <div class="ml-2 w-full">
                                     <h5>
@@ -558,7 +569,12 @@
                 <hr>
                 <div data-te-modal-body-ref class="relative p-2">
                     <div class="p-0.5 mt-1 flex items-center">
-                        <img alt="" class="w-10 h-10 rounded-full" src="{{asset('/storage/profile_photos/'.$authUser->profile_photo)}}"></img>
+                        @if($authUser->profile_photo!=null)
+                            <img alt="" class="w-10 h-10 rounded-full" src="{{asset('/storage/profile_photos/'.$authUser->profile_photo)}}"></img>
+                        @else
+                            <img class="w-10 h-10 rounded-full" alt="" src="{{URL::to('defult/profile.jpeg')}}">
+                        @endif
+
                         <h1 class="font-bold text-black dark:text-white text-[15px] ml-2">
                             {{$authUser->first_name}} {{$authUser->last_name}}
                         </h1>

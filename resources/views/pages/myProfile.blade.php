@@ -373,7 +373,13 @@
                             <div class="flex items-start gap-x-10 justify-between">
                                 <div class="flex items-center gap-x-0.5">
                                     <div class="w-[3rem]">
-                                        <img alt="" class="w-10 h-10 rounded-full" src="{{asset('/storage/profile_photos/'.$userPostData->user->profile_photo)}}"></img>
+
+                                        @if($userPostData->user->profile_photo!=null)
+                                            <img alt="" class="w-10 h-10 rounded-full" src="{{asset('/storage/profile_photos/'.$userPostData->user->profile_photo)}}"></img>
+                                        @else
+                                            <img class="w-10 h-10 rounded-full" alt="" src="{{URL::to('defult/profile.jpeg')}}">
+                                        @endif
+
                                     </div>
                                     <div class="ml-2 w-full">
                                         <h5>

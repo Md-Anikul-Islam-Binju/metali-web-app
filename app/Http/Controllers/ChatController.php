@@ -11,15 +11,23 @@ class ChatController extends Controller
 {
     public function chat($userId = null)
     {
-
-
         $authUser = auth()->user();
         $friends = $authUser->friends;
         $selectedUser = null;
         if ($userId) {
             $selectedUser = User::find($userId);
         }
-        return view('pages.chat',compact('authUser','friends','selectedUser'));
+        $messages = Chat::where(function ($query) use ($authUser, $selectedUser) {
+            if ($authUser && $selectedUser) {
+                $query->where('message_sender_id', $authUser->id)
+                    ->where('message_receiver_id', $selectedUser->id);
+
+                $query->orWhere('message_sender_id', $selectedUser->id)
+                    ->where('message_receiver_id', $authUser->id);
+            }
+        })->get();
+
+        return view('pages.chat',compact('authUser','friends','selectedUser','messages'));
     }
 
     public function sendMessage(Request $request)
