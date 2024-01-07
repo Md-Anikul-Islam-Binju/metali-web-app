@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
+use App\Models\Page;
 use App\Models\TimelinePostLike;
+use App\Models\User;
 use App\Models\UserPost;
 use App\Models\UserPostComment;
 use App\Models\UserPostReplie;
@@ -70,7 +73,11 @@ class TimelineController extends Controller
         if($authUser->role==2){
             return view('pages.timeline',compact('authUser','userPost'));
         }elseif ($authUser->role==1){
-            return view('admin.dashboard');
+            $totalUser = User::where('role',2)->count();
+            $totalPage = Page::count();
+            $totalGroup = Group::count();
+            $totalPost = UserPost::count();
+            return view('admin.dashboard',compact('totalGroup','totalPage','totalPost','totalUser'));
         }
 
     }
