@@ -13,9 +13,16 @@ class PageController extends Controller
 {
     public function pageList()
     {
+
         $authUser = Auth::user();
-        $myPages = Page::where('user_id', auth()->user()->id)->get();
-        $suggestPages = Page::where('user_id', '!=', auth()->user()->id)->get();
+        $myPages = Page::where('user_id', auth()->user()->id)
+            ->withCount('likes')
+            ->with('likes.user')
+            ->get();
+        $suggestPages = Page::where('user_id', '!=', auth()->user()->id)
+            ->withCount('likes')
+            ->with('likes.user')
+            ->get();
         return view('pages.pageList', compact('myPages', 'suggestPages', 'authUser'));
     }
 
@@ -64,10 +71,9 @@ class PageController extends Controller
             ->with(['posts' => function ($query) {
                 $query->withCount('likes','comments')->orderBy('created_at', 'desc');
             }, 'posts.user','posts.comments.user', 'posts.comments.replies.user', 'posts.likes'])
+            ->withCount('likes')
             ->first();
         $authUser = Auth::user();
-        //dd($pageProfile);
-
         return view('pages.pageProfile', compact('pageProfile', 'authUser'));
     }
 
@@ -135,6 +141,27 @@ class PageController extends Controller
         $comment->reply = $request->input('reply');
         $comment->save();
         return redirect()->back()->with('success', 'Reply added successfully');
+    }
+
+
+    public function togglePageLike($pageId)
+    {
+        $user = Auth::user();
+        $page = Page::findOrFail($pageId);
+
+        if ($page->isLikedByUser($user->id)) {
+            $page->likes()->where('user_id', $user->id)->delete();
+            $message = 'Page unliked successfully';
+        } else {
+            $like = $page->likes()->create(['user_id' => $user->id]);
+            $message = 'Page liked successfully';
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'isLiked' => !$page->isLikedByUser($user->id),
+        ], 200);
     }
 
 

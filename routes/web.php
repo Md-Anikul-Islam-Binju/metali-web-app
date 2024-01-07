@@ -96,6 +96,9 @@ Route::middleware('auth')->group(function () {
     //Page Post
     Route::post('/page-post-store',[PageController::class,'pagePostStore'])->name('page.post.store');
 
+    Route::post('pages/{pageId}/like', [PageController::class, 'togglePageLike']);
+    Route::post('groups/{groupId}/like', [GroupController::class, 'toggleGroupFlow']);
+
     //Store Comment
     Route::post('store-coment',[TimelineController::class,'storeComment'])->name('comment.store');
     Route::post('store-reply-coment',[TimelineController::class,'storeReplyComment'])->name('reply.comment.store');
@@ -108,7 +111,7 @@ Route::middleware('auth')->group(function () {
     Route::post('groups/posts/{postId}/like', [GroupController::class, 'togglePostLike']);
 
 
-    //Group Comment
+    //Page Comment
     Route::post('store-page-coment',[PageController::class,'storePageComment'])->name('comment.page.store');
     Route::post('store-page-reply-coment',[PageController::class,'storeReplyPageComment'])->name('reply.page.comment.store');
     Route::post('page/posts/{postId}/like', [PageController::class, 'togglePostLike']);

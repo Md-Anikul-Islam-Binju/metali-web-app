@@ -117,10 +117,12 @@
                             {{$groupProfile->name}}</p>
                     </div>
                 </div>
+
+
+
                 <div class="mt-5 sm:mt-0">
-                    <button class="inline-flex items-center sm:mr-2 mt-11 h-10 px-3 text-white transition-colors duration-150 bg-[#62bb46] rounded-md focus:shadow-outline">
-                        <i class="fas fa-plus-circle ml-2"></i>
-                        <span class="font-medium ml-1">Add Member</span>
+                    <button id="likeButton" data-page-id="{{ $groupProfile->id }}" data-is-liked="{{ $groupProfile->isLikedByUser(Auth::id()) ? 'true' : 'false' }}" class="inline-flex items-center sm:mr-2 mt-11 h-8 sm:h-10 px-3 text-white transition-colors duration-150 bg-{{ $groupProfile->isLikedByUser(Auth::id()) ? '#e74c3c' : '#62bb46' }} rounded-md focus:shadow-outline">
+                        <span class="font-medium ml-1">{{ $groupProfile->isLikedByUser(Auth::id()) ? 'UnFollow' : 'Follow' }}</span>
                     </button>
                 </div>
             </div>
@@ -151,7 +153,7 @@
                             <span>
                                 Members
                                 <a class="no-underline hover:underline text-blue" href="#">
-                                    33 people
+                                    {{$groupProfile->likes_count}} people
                                 </a>
                             </span>
                         </li>
@@ -685,4 +687,53 @@
             });
         });
     </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const likeButton = document.getElementById('likeButton');
+            const groupId = likeButton.getAttribute('data-page-id');
+            const isLiked = likeButton.getAttribute('data-is-liked') === 'true';
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Introduce a flag to track whether the button has been clicked
+            let buttonClicked = false;
+
+            function updateButtonState(isLiked) {
+                likeButton.innerHTML = `
+                <span class="font-medium ml-1">${isLiked ? 'UnFollow' : 'Follow'}</span>
+            `;
+                likeButton.style.backgroundColor = isLiked ? '#e74c3c' : '#62bb46';
+
+                // Reload the page after the first click
+                if (buttonClicked) {
+                    location.reload();
+                } else {
+                    buttonClicked = true;
+                }
+            }
+
+            updateButtonState(isLiked);
+
+            likeButton.addEventListener('click', function () {
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', `/groups/${groupId}/like`, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+
+                        if (response.status) {
+                            updateButtonState(response.isLiked);
+                        }
+                    }
+                };
+                xhr.send(JSON.stringify({}));
+            });
+        });
+    </script>
+
 @endsection

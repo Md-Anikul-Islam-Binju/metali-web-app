@@ -14,8 +14,8 @@ class GroupController extends Controller
     public function groupList()
     {
         $authUser = Auth::user();
-        $myGroups = Group::where('user_id', auth()->user()->id)->get();
-        $suggestGroups = Group::where('user_id', '!=', auth()->user()->id)->get();
+        $myGroups = Group::where('user_id', auth()->user()->id)->withCount('likes')->with('likes.user')->get();
+        $suggestGroups = Group::where('user_id', '!=', auth()->user()->id)->withCount('likes')->with('likes.user')->get();
         return view('pages.groupList', compact('myGroups', 'suggestGroups', 'authUser'));
     }
 
@@ -61,7 +61,7 @@ class GroupController extends Controller
             ->with(['posts' => function ($query) {
                 $query->withCount('likes','comments')->orderBy('created_at', 'desc');
             }, 'posts.user', 'posts.likes', 'posts.comments.user', 'posts.comments.replies.user'])
-
+            ->withCount('likes')
             ->first();
         $authUser = Auth::user();
         return view('pages.groupProfile', compact('groupProfile', 'authUser'));
@@ -130,6 +130,25 @@ class GroupController extends Controller
         $comment->reply = $request->input('reply');
         $comment->save();
         return redirect()->back()->with('success', 'Reply added successfully');
+    }
+
+    public function toggleGroupFlow($groupId)
+    {
+        $user = Auth::user();
+        $group = Group::findOrFail($groupId);
+
+        if ($group->isLikedByUser($user->id)) {
+            $group->likes()->where('user_id', $user->id)->delete();
+            $message = 'Group Unfollow successfully';
+        } else {
+            $like = $group->likes()->create(['user_id' => $user->id]);
+            $message = 'Group Follow successfully';
+        }
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'isLiked' => !$group->isLikedByUser($user->id),
+        ], 200);
     }
 
 

@@ -167,15 +167,19 @@
                         <h1 class="font-bold sm:text-3xl text-black dark:text-white pl-10 sm:pl-10 mt-9">
                             {{$pageProfile->name}}
                         </h1>
-                        <p class="pl-10 sm:pl-10 mt-1 text-lg">20 Likes</p>
+                        <p class="pl-10 sm:pl-10 mt-1 text-lg">{{$pageProfile->likes_count}} Likes</p>
                     </div>
                 </div>
+
+
                 <div class="mt-5 sm:mt-0">
-                    <button class="inline-flex items-center sm:mr-2 mt-11 h-8 sm:h-10 px-3 text-white transition-colors duration-150 bg-[#62bb46] rounded-md focus:shadow-outline">
+                    <button id="likeButton" data-page-id="{{ $pageProfile->id }}" data-is-liked="{{ $pageProfile->isLikedByUser(Auth::id()) ? 'true' : 'false' }}" class="inline-flex items-center sm:mr-2 mt-11 h-8 sm:h-10 px-3 text-white transition-colors duration-150 bg-{{ $pageProfile->isLikedByUser(Auth::id()) ? '#e74c3c' : '#62bb46' }} rounded-md focus:shadow-outline">
                         <i class="fas fa-thumbs-up ml-2"></i>
-                        <span class="font-medium ml-1">Like</span>
+                        <span class="font-medium ml-1">{{ $pageProfile->isLikedByUser(Auth::id()) ? 'Unlike' : 'Like' }}</span>
                     </button>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -203,7 +207,7 @@
                             <span class="ml-3">
                                 Peoples
                                 <a class="no-underline hover:underline text-blue" href="#">
-                                    20 people
+                                    {{$pageProfile->likes_count}} people
                                 </a>
                             </span>
                         </li>
@@ -232,15 +236,15 @@
                                 @else
                                     <img class="block w-11 h-11 rounded-full mt-4" alt="" src="{{URL::to('defult/profile.jpeg')}}">
                                 @endif
-
-
-                                <div disabled
+                                    <div disabled
                                           type="button"
                                           data-te-toggle="modal"
                                           data-te-target="#exampleModalCenter1"
                                           data-te-ripple-init
                                           data-te-ripple-color="light"
-                                          class="appearance-none h-10 border cursor-pointer flex-1 items-center ml-2 mt-4 rounded-3xl text-black bg-white py-2.5 focus:outline-none px-4" id="body" name="body" placeholder="What's on your mind?"></div>
+                                          class="appearance-none h-10 border cursor-pointer flex-1 items-center ml-2 mt-4 rounded-3xl text-black bg-white py-2.5 focus:outline-none px-4" id="body" name="body" placeholder="What's on your mind?">
+
+                                   </div>
                             </div>
                         </div>
                         <div class="px-3 pb-1 text-black dark:text-white">
@@ -733,4 +737,54 @@
             });
         });
     </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const likeButton = document.getElementById('likeButton');
+            const pageId = likeButton.getAttribute('data-page-id');
+            const isLiked = likeButton.getAttribute('data-is-liked') === 'true';
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // Introduce a flag to track whether the button has been clicked
+            let buttonClicked = false;
+
+            function updateButtonState(isLiked) {
+                likeButton.innerHTML = `
+                <i class="fas fa-thumbs-up ml-2"></i>
+                <span class="font-medium ml-1">${isLiked ? 'Unlike' : 'Like'}</span>
+            `;
+                likeButton.style.backgroundColor = isLiked ? '#e74c3c' : '#62bb46';
+
+                // Reload the page after the first click
+                if (buttonClicked) {
+                    location.reload();
+                } else {
+                    buttonClicked = true;
+                }
+            }
+
+            updateButtonState(isLiked);
+
+            likeButton.addEventListener('click', function () {
+                const xhr = new XMLHttpRequest();
+
+                xhr.open('POST', `/pages/${pageId}/like`, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+
+                        if (response.status) {
+                            updateButtonState(response.isLiked);
+                        }
+                    }
+                };
+                xhr.send(JSON.stringify({}));
+            });
+        });
+    </script>
+
 @endsection

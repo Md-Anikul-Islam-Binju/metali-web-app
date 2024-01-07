@@ -134,14 +134,13 @@
                                                                 <h3 class="font-bold text-2xl mb-1 text-black dark:text-white">
                                                                     {{$myGroupsData->name}}</h3>
                                                                 <div class="inline-flex mt-2 text-gray-700 items-center dark:text-white">
-                                                                    20 Members
+                                                                    {{$myGroupsData->likes_count}} Members
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex md:flex-col xl:flex-row gap-2 items-center">
                                                             <button class="flex-1 rounded-full bg-[#62bb46] text-white antialiased font-bold px-4 py-3">
-                                                                <i class="fas fa-check mr-1 mt-2"></i>
-                                                                Joined
+                                                                Visit
                                                             </button>
                                                         </div>
                                                     </div>
@@ -167,14 +166,13 @@
                                                                     {{$suggestGroupsData->name}}
                                                                 </h3>
                                                                 <div class="inline-flex mt-2 text-gray-700 items-center dark:text-white">
-                                                                    2 Members
+                                                                    {{$suggestGroupsData->likes_count}} Members
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex md:flex-col xl:flex-row gap-2 items-center">
                                                             <button class="flex-1 rounded-full bg-[#6b7069] text-white antialiased font-bold px-4 py-3">
-                                                                <i class="fas fa-plus-circle mr-1 mt-2"></i>
-                                                                Join
+                                                                Visit
                                                             </button>
                                                         </div>
                                                     </div>

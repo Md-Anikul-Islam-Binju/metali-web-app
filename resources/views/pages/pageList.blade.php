@@ -136,14 +136,13 @@
                                                                 <h3 class="font-bold text-2xl mb-1 text-black dark:text-white">
                                                                     {{$myPagesData->name}}</h3>
                                                                 <div class="inline-flex mt-2 text-gray-700 items-center dark:text-white">
-                                                                    20 Likes
+                                                                    {{$myPagesData->likes_count}} Likes
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex md:flex-col xl:flex-row gap-2 items-center">
                                                             <button class="flex-1 rounded-full bg-[#62bb46] text-white antialiased font-bold px-4 py-3">
-                                                                <i class="fas fa-thumbs-up mr-1 mt-2"></i>
-                                                                Liked
+                                                                Visit Page
                                                             </button>
                                                         </div>
                                                     </div>
@@ -167,14 +166,13 @@
                                                                 <h3 class="font-bold text-2xl mb-1 text-black dark:text-white">
                                                                     {{$suggestPagesData->name}}</h3>
                                                                 <div class="inline-flex mt-2 text-gray-700 items-center dark:text-white">
-                                                                    2 likes
+                                                                    {{$suggestPagesData->likes_count}} Likes
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="flex md:flex-col xl:flex-row gap-2 items-center">
                                                             <button class="flex-1 rounded-full bg-[#6b7069] text-white antialiased font-bold px-4 py-3">
-                                                                <i class="fas fa-thumbs-up mr-1 mt-2"></i>
-                                                                like
+                                                                Visit Page
                                                             </button>
                                                         </div>
                                                     </div>
