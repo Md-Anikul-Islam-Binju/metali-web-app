@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -36,6 +37,12 @@ class UserRegisterController extends Controller
                 'gender' => $request->input('gender'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password'))
+            ]);
+            // Use the 'mymetali-chat' database connection for the 'users' table
+            DB::connection('mymetali-chat')->table('users')->insert([
+                'name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
             ]);
             // Authenticate the user
             Auth::login($user);

@@ -93,6 +93,21 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'mymetali-chat' => [
+            'driver' => 'mysql',
+            'host' => env('DB_METALI_CHAT_HOST', '127.0.0.1'),
+            'port' => env('DB_METALI_CHAT_PORT', '3306'),
+            'database' => env('DB_METALI_CHAT_DATABASE', 'forge'),
+            'username' => env('DB_METALI_CHAT_USERNAME', 'forge'),
+            'password' => env('DB_METALI_CHAT_PASSWORD', ''),
+            'unix_socket' => env('DB_METALI_CHAT_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
     ],
 
     /*

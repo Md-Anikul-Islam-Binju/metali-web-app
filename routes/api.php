@@ -60,6 +60,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/friends',[FriendRequestController::class, 'index']);
     Route::delete('/unfriend/{friend}', [FriendRequestController::class, 'unfriendUser']);
 
+    //Message
+    Route::post('/messages', [FriendRequestController::class, 'storeMessage']);
+    Route::get('/messages/{receiverId}', [FriendRequestController::class, 'getMessages']);
+
 
     //Page
     Route::post('store-page', [PageController::class, 'store']);

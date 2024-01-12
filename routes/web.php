@@ -3,7 +3,6 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AdminDashboardController;
-use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FriendListController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\GroupController;
@@ -104,12 +103,10 @@ Route::middleware('auth')->group(function () {
     Route::post('store-reply-coment',[TimelineController::class,'storeReplyComment'])->name('reply.comment.store');
     Route::post('user/post/{postId}/like', [TimelineController::class, 'toggleLike']);
 
-
     //Group Comment
     Route::post('store-group-coment',[GroupController::class,'storeGroupComment'])->name('comment.group.store');
     Route::post('store-group-reply-coment',[GroupController::class,'storeReplyGroupComment'])->name('reply.group.comment.store');
     Route::post('groups/posts/{postId}/like', [GroupController::class, 'togglePostLike']);
-
 
     //Page Comment
     Route::post('store-page-coment',[PageController::class,'storePageComment'])->name('comment.page.store');
@@ -117,9 +114,7 @@ Route::middleware('auth')->group(function () {
     Route::post('page/posts/{postId}/like', [PageController::class, 'togglePostLike']);
 
 
-    //Chat
-    Route::get('/chat/{user?}',[ChatController::class,'chat'])->name('chat');
-    Route::post('/send-message', [ChatController::class, 'sendMessage'])->name('send.message');
+
 
 });
 

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Events\NewMessage;
 use App\Http\Controllers\Controller;
+use App\Models\Chat;
 use App\Models\FriendRequests;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FriendRequestController extends Controller
 {
@@ -93,5 +96,33 @@ class FriendRequestController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error accepting friend request.'], 500);
         }
+    }
+
+    public function storeMessage(Request $request)
+    {
+        $request->validate([
+            'message_receiver_id' => 'required|exists:users,id',
+            'message' => 'required|string',
+        ]);
+        $chat = Chat::create([
+            'message_sender_id' => auth()->id(),
+            'message_receiver_id' => $request->input('message_receiver_id'),
+            'message' => $request->input('message'),
+        ]);
+        broadcast(new NewMessage($chat));
+        return response()->json(['data' => ['chat' => $chat]], 201);
+    }
+
+    public function getMessages($receiverId)
+    {
+        $chats = Chat::where(function ($query) use ($receiverId) {
+            $query->where('message_sender_id', Auth::id())
+                ->where('message_receiver_id', $receiverId);
+        })->orWhere(function ($query) use ($receiverId) {
+            $query->where('message_sender_id', $receiverId)
+                ->where('message_receiver_id', Auth::id());
+        })->orderBy('created_at')->paginate(10);
+
+        return response()->json(['data' => ['chats' => $chats]], 200);
     }
 }
