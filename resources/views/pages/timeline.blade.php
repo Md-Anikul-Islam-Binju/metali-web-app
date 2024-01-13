@@ -155,7 +155,7 @@
                         <i class="fas fa-flag"></i>
                         <span class="text-[15px] ml-4 text-black dark:text-white font-bold">Page</span>
                     </a>
-                    <a href="#" class="p-2.5 mt-3 flex items-center text-black dark:text-white rounded-md px-4 duration-300 cursor-pointer">
+                    <a href="http://127.0.0.1:8000/chat/" class="p-2.5 mt-3 flex items-center text-black dark:text-white rounded-md px-4 duration-300 cursor-pointer">
                         <i class="fab fa-rocketchat"></i>
                         <span class="text-[15px] ml-4 text-black dark:text-white font-bold">Chat</span>
                     </a>
