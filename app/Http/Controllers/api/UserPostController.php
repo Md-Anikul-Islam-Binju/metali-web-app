@@ -76,16 +76,44 @@ class UserPostController extends Controller
 //        }
 //    }
 
+//    public function getAuthUserPosts()
+//    {
+//        $user = Auth::user();
+//
+//        if ($user) {
+//            $posts = UserPost::with(['user', 'comments.user', 'comments.replies.user'])
+//                ->withCount(['comments', 'timelinePostLikes'])
+//                ->where('user_id', $user->id)
+//                ->latest()
+//                ->paginate(15);
+//
+//            return response()->json([
+//                'status' => true,
+//                'posts' => $posts,
+//            ], 200);
+//        } else {
+//            return response()->json([
+//                'status' => false,
+//                'message' => 'User not authenticated',
+//            ], 401);
+//        }
+//    }
     public function getAuthUserPosts()
     {
-        $user = Auth::user();
 
+        $user = Auth::user();
         if ($user) {
             $posts = UserPost::with(['user', 'comments.user', 'comments.replies.user'])
                 ->withCount(['comments', 'timelinePostLikes'])
                 ->where('user_id', $user->id)
                 ->latest()
                 ->paginate(15);
+
+            // Decode the image paths from JSON string to array
+            $posts->transform(function ($post) {
+                $post->image = json_decode($post->image, true);
+                return $post;
+            });
 
             return response()->json([
                 'status' => true,
@@ -115,6 +143,11 @@ class UserPostController extends Controller
             ->withCount(['comments', 'timelinePostLikes'])
             ->latest()
             ->paginate(15);
+
+        $posts->transform(function ($post) {
+            $post->image = json_decode($post->image, true);
+            return $post;
+        });
 
         return response()->json([
             'status' => true,
