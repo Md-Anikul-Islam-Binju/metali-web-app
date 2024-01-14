@@ -460,7 +460,11 @@
                                     @foreach ($pageProfileData->comments as $pageProfilePostComment)
                                         <div class="flex items-start space-x-2">
                                             <a href="{{route('visit.user.profile',$pageProfilePostComment->user->id)}}">
-                                                <img src="{{asset('/storage/profile_photos/'.$pageProfilePostComment->user->profile_photo)}}" alt="Profile Image" class="w-10 h-10 rounded-full">
+                                                @if($pageProfilePostComment->user->profile_photo!=null)
+                                                    <img src="{{asset('/storage/profile_photos/'.$pageProfilePostComment->user->profile_photo)}}" alt="Profile Image" class="w-10 h-10 rounded-full">
+                                                @else
+                                                    <img alt="" class="w-10 h-10 rounded-full" src="{{URL::to('defult/profile.jpeg')}}"></img>
+                                                @endif
                                             </a>
                                             <div class="flex-1">
                                                 <div class="bg-gray-100 p-3 rounded-lg">
@@ -518,7 +522,11 @@
                                             @foreach ($pageProfilePostComment->replies as $reply)
                                                 <div class="ml-12 mt-4 flex items-start space-x-2">
                                                     <a href="{{route('visit.user.profile',$reply->user->id)}}">
-                                                        <img src="{{asset('/storage/profile_photos/'.$reply->user->profile_photo)}}" alt="Subcomment Profile Image" class="w-10 h-10 rounded-full">
+                                                        @if($reply->user->profile_photo!=null)
+                                                            <img src="{{asset('/storage/profile_photos/'.$reply->user->profile_photo)}}" alt="Profile Image" class="w-10 h-10 rounded-full">
+                                                        @else
+                                                            <img alt="" class="w-10 h-10 rounded-full" src="{{URL::to('defult/profile.jpeg')}}"></img>
+                                                        @endif
                                                     </a>
                                                     <div class="flex-1">
                                                         <div class="bg-gray-100 p-2 rounded-lg">
